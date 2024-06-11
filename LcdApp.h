@@ -13,7 +13,7 @@ extern "C" {
 #endif
 
 #include <xc.h>
-    
+    extern void LCD_Cyclic(void);
     extern void LCD_RxIndication(uint8_t data);
 
 

@@ -1,7 +1,7 @@
 
 #include <xc.h>
 #include "TMR1.h"
-#include "LcdApp.h"
+#include "protocol.h"
 
 #define SOFTSER_USE_PARITY (0)
 
@@ -62,7 +62,7 @@ void SoftSer_CaptureBit(void)
         else
         {
             // Notify higher layer
-            LCD_RxIndication(rxByte);
+            Proto_RxIndication(rxByte);
         }
         TMR1_Disable(); // Wait for next frame
         INTCONbits.INTF = 0; // Clear pending flag

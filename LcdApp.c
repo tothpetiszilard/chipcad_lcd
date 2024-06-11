@@ -1,5 +1,6 @@
 #include "LcdApp.h"
 #include "hd44780.h"
+#include "protocol.h"
 
 typedef enum
 {
@@ -10,10 +11,25 @@ typedef enum
             
 }LcdApp_State;
 
-static LcdApp_State state = IDLE;
+void LCD_Cyclic(void)
+{
+    uint8_t rxLen = 0;
+    uint8_t *dataPtr = NULL;
+    rxLen = Proto_Available();
+    if (0 < rxLen)
+    {
+        uint8_t i = 0;
+        dataPtr = Proto_Read();
+        for (i = 0; i < rxLen; i++)
+        {
+            LCD_RxIndication(dataPtr[i]);
+        }
+    }
+}
 
 void LCD_RxIndication(uint8_t data)
 {
+    static LcdApp_State state = IDLE;
     if (IDLE == state)
     {
         switch (data)
