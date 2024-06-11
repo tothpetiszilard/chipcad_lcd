@@ -34,11 +34,10 @@ void SoftSer_CaptureBit(void)
         if (0 != bitCnt)
         {
             rxByte |= (PORTBbits.RB0 << (bitCnt - 1));
-            //rxByte = rxByte << 1;
         }
         else if (0 != PORTBbits.RB0)
         {
-            // must by low
+            // must be low
             // ERROR
         }
     }
@@ -55,7 +54,7 @@ void SoftSer_CaptureBit(void)
 #endif
     else
     {
-        // must by high
+        // must be high
         if (1 != PORTBbits.RB0)
         {
             // ERROR
