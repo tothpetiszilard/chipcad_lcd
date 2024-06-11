@@ -1,10 +1,13 @@
 #include "hd44780.h"
+#include "chars.h"
 
 #ifdef HD44780_DUAL
 	#define HD44780_SET_E(x) {if (hd44780_device == 0) HD44780_E1 = x; else HD44780_E2 = x;}
 #else
 	#define HD44780_SET_E(x) {HD44780_E = x;}
 #endif
+
+static void hd44780_build(unsigned char location, unsigned char *ptr);
 
 void hd44780_wait()
 {
@@ -121,4 +124,35 @@ void hd44780_init(void)
 #ifdef HD44780_DUAL
 	}
 #endif
+    hd44780_build(0,&hungarian[0][0]);
+    hd44780_build(1,&hungarian[1][0]);
+    hd44780_build(2,&hungarian[2][0]);
+    hd44780_build(3,&hungarian[3][0]);
+    hd44780_build(4,&hungarian[4][0]);
+    hd44780_build(5,&hungarian[5][0]);
+    hd44780_build(6,&hungarian[6][0]);
+}
+
+//Input:
+//     location: location where you want to store
+//               0,1,2,....7
+//     ptr: Pointer to pattern data
+//
+//Usage:
+//     pattern[8]={0x04,0x0E,0x0E,0x0E,0x1F,0x00,0x04,0x00};
+//     LCD_build(1,pattern);
+//
+//LCD Ports are same as discussed in previous sections
+ 
+static void hd44780_build(unsigned char location, unsigned char *ptr)
+{
+    unsigned char i;
+    if(location<8)
+    {
+        hd44780_put_cmd(0x40+(location*8));
+        for(i=0;i<8;i++)
+        {
+            hd44780_put_char(ptr[ i ]);
+        }
+   }
 }
