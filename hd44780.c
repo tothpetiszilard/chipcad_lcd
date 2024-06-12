@@ -8,8 +8,10 @@
 #endif
 
 static void hd44780_build(unsigned char location, unsigned char *ptr);
+static inline void hd44780_init_ports(void);
+static inline void hd44780_put_cmd(unsigned char cmd);
 
-void hd44780_wait()
+static inline void hd44780_wait()
 {
 	unsigned char temp;
 	HD44780_DATA_TRIS = HD44780_DATA_CAST(0xff);
@@ -45,7 +47,7 @@ void hd44780_put_char(unsigned char data)
 #endif
 }
 
-void hd44780_put_cmd(unsigned char cmd)
+static inline void hd44780_put_cmd(unsigned char cmd)
 {
 	hd44780_wait();
 	HD44780_RS = 0;
@@ -74,7 +76,7 @@ inline void hd44780_clear(void)
 	HD44780_DELAY_1640US();
 }
 
-void hd44780_init_ports(void)
+static inline void hd44780_init_ports(void)
 {
     ANSEL = 0x00;
     ANSELH = 0x00;

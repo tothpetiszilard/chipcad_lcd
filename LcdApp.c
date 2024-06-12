@@ -8,7 +8,7 @@ typedef enum
     BACKLIGHT,
     CONTRAST,
     SETPOS,
-            
+    ERROR
 }LcdApp_State;
 
 void LCD_Cyclic(void)
@@ -18,12 +18,15 @@ void LCD_Cyclic(void)
     rxLen = Proto_Available();
     if (0 < rxLen)
     {
-        uint8_t i = 0;
         dataPtr = Proto_Read();
-        for (i = 0; i < rxLen; i++)
+        if (NULL != dataPtr)
         {
-            LCD_RxIndication(dataPtr[i]);
+            for (uint8_t i = 0; i < rxLen; i++)
+            {
+                LCD_RxIndication(dataPtr[i]);
+            }
         }
+        Proto_Clear();
     }
 }
 
@@ -92,6 +95,10 @@ void LCD_RxIndication(uint8_t data)
     {
         // Not implemented yet
         (void)(data);
+        state = IDLE;
+    }
+    else
+    {
         state = IDLE;
     }
 }

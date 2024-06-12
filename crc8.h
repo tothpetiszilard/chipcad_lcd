@@ -64,7 +64,7 @@ unsigned char crc_nibbles(unsigned char);
 unsigned char crc_math(unsigned char);
 #endif /* CRC_MATH */
 
-void crc8_init(unsigned char);
+inline void crc8_init(unsigned char);
 unsigned char crc8_byte(unsigned char);
 unsigned char crc8_stream(unsigned char*, unsigned int);
 

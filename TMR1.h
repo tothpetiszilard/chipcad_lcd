@@ -13,7 +13,7 @@ extern "C" {
 #endif
 
     extern void TMR1_Init(void);
-    extern void TMR1_Enable(void);
+    inline void TMR1_Enable(void);
     extern void TMR1_Disable(void);
     extern void TMR1_Interrupt(void);
 

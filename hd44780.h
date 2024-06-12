@@ -69,10 +69,8 @@ unsigned char hd44780_device = 0;
 #endif
 
 void hd44780_put_char(unsigned char data);
-void hd44780_put_cmd(unsigned char cmd);
 inline void hd44780_clear(void);
 inline void hd44780_set_address(unsigned char addr);
-void hd44780_init_ports(void);
 void hd44780_init(void);
 
 #endif

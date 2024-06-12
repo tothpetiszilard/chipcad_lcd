@@ -7,6 +7,7 @@
 
 static volatile uint8_t rxByte = 0;
 static volatile uint8_t bitCnt = 0;
+static volatile uint8_t rxReady = 0;
 
 void SoftSer_Init(void)
 {
@@ -15,6 +16,15 @@ void SoftSer_Init(void)
     INTCONbits.INTF = 0;
     INTCONbits.INTE = 1; // Enable Start signal detection
     TRISCbits.TRISC5 = 0;
+}
+
+void SoftSer_Cyclic(void)
+{
+    if (0 != rxReady)
+    {
+        Proto_RxIndication(rxByte);
+        rxReady = 0;
+    }
 }
 
 void SoftSer_StartDetect(void)
@@ -62,7 +72,7 @@ void SoftSer_CaptureBit(void)
         else
         {
             // Notify higher layer
-            Proto_RxIndication(rxByte);
+            rxReady = 1;
         }
         TMR1_Disable(); // Wait for next frame
         INTCONbits.INTF = 0; // Clear pending flag

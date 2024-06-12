@@ -23,12 +23,12 @@
 #include "crc8.h"
 
 // Global CRC variable
-unsigned char crc;
+volatile unsigned char crc;
 
 // Lets external code initialise the CRC variable, required if 
 // callers use crc8_byte
 
-void crc8_init(unsigned char c) {
+inline void crc8_init(unsigned char c) {
     crc = c;
 }
 
@@ -114,74 +114,3 @@ unsigned char crc8_stream(unsigned char *data, unsigned int length) {
     return crc;
 }
 
-
-/*
-int main(int argc, char **argv)
-{
-  int i;
-
-  crc = 0xff;
-
-  /*
-    Standard check for the string "123456789"
-  
-  
-  for(i='1'; i<='9'; i++) {
-    crc8(i);
-    printf(" %d 0x%02x\n",i,crc);
-  }
-  
-  printf("\n----\n\n");
-
-  /* 
-     Orthogonal check
-     Set the crc =0 and data = 2^n and compute new crc
-  
-
-  crc = 0x00;
-  crc8(1);
-  crc = 0x00;
-  crc8(2);
-  crc = 0x00;
-  crc8(4);
-  crc = 0x00;
-  crc8(8);
-  crc = 0x00;
-  crc8(16);
-  crc = 0x00;
-  crc8(32);
-  crc = 0x00;
-  crc8(64);
-  crc = 0x00;
-  crc8(128);
-
-  /*
-    CRC example in the Dallas APNote
-  
-  crc=0;
-  i = 0x02;
-  printf(" %3x 0x%02x\n",i,crc8(i));
-  
-  i = 0x1c;
-  printf(" %3x 0x%02x\n",i,crc8(i));
-  
-  i = 0xb8;
-  printf(" %3x 0x%02x\n",i,crc8(i));
-  
-  i = 0x01;
-  printf(" %3x 0x%02x\n",i,crc8(i));
-  
-  i = 0x00;
-  printf(" %3x 0x%02x\n",i,crc8(i));
-  
-  i = 0x00;
-  printf(" %3x 0x%02x\n",i,crc8(i));
-  
-  i = 0x00;
-  printf(" %3x 0x%02x\n",i,crc8(i));
-  
-  i = 0xa2;
-  printf(" %3x 0x%02x\n",i,crc8(i));
-
-  return 0;
-}*/

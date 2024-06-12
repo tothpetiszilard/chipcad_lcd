@@ -13,6 +13,7 @@ extern "C" {
 #endif
 
 extern void SoftSer_Init(void);
+extern void SoftSer_Cyclic(void);
 extern void SoftSer_StartDetect(void);
 extern void SoftSer_CaptureBit(void);
 

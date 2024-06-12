@@ -15,27 +15,37 @@ typedef enum
 }LcdApp_State;
 
 static volatile LcdApp_State state = IDLE;
-static volatile uint8_t rxBuffer[40];
+static volatile uint8_t rxBuffer1[30];
+static volatile uint8_t rxBuffer2[30];
 static volatile uint8_t rxLen = 0;
 static volatile uint8_t rxIdx = 0;
+static volatile uint8_t *buffSel = rxBuffer1;
+static volatile uint8_t rxReady = 0;
 
 uint8_t Proto_Available(void)
 {
-    uint8_t retVal = 0;
-    if (PROCESS == state)
-    {
-        retVal = rxLen;
-    }
-    return retVal;
+    return rxReady;
 }
 uint8_t * Proto_Read(void)
 {
     uint8_t * retVal = NULL;
-    if (PROCESS == state)
+    if (0 != rxReady)
     {
-        retVal = (uint8_t *)rxBuffer;
+        if (rxBuffer1 == buffSel)
+        {
+            retVal = (uint8_t *)rxBuffer2;
+        }
+        else
+        {
+            retVal = (uint8_t *)rxBuffer1;
+        }
     }
     return retVal;
+}
+
+void Proto_Clear(void)
+{
+    rxReady = 0;
 }
 
 void Proto_RxIndication(uint8_t data)
@@ -47,10 +57,11 @@ void Proto_RxIndication(uint8_t data)
     }
     else if (LEN == state)
     {
-        if (40 > data)
+        if (sizeof(rxBuffer1) > data)
         {
             rxLen = data;
             rxIdx = 0;
+            state = DATA;
         }
         else
         {
@@ -59,7 +70,7 @@ void Proto_RxIndication(uint8_t data)
     }
     else if (DATA == state)
     {
-        rxBuffer[rxIdx] = data;
+        buffSel[rxIdx] = data;
         rxIdx++;
         if (rxIdx >= rxLen)
         {
@@ -69,10 +80,22 @@ void Proto_RxIndication(uint8_t data)
     }
     else if (CRC == state)
     {
-        if (data == crc8_stream((uint8_t *)rxBuffer,rxLen))
+        if (data == crc8_stream((uint8_t *)buffSel,rxLen))
         {
             // CRC OK
-            state = PROCESS;
+            if (0 == rxReady) // else data loss
+            {
+                if (rxBuffer1 == buffSel)
+                {
+                    buffSel = rxBuffer2;
+                }
+                else
+                {
+                    buffSel = rxBuffer1;
+                }
+                rxReady = rxLen;
+            }
+            state = IDLE;
         }
         else
         {

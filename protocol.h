@@ -16,7 +16,7 @@ extern "C" {
 extern void Proto_RxIndication(uint8_t data);
 extern uint8_t Proto_Available(void);
 extern uint8_t * Proto_Read(void);
-
+extern void Proto_Clear(void);
 
 #ifdef	__cplusplus
 }

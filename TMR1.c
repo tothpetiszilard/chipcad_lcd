@@ -18,7 +18,7 @@ void TMR1_Init(void)
     TMR1 = 0;
 }
 
-void TMR1_Enable(void)
+inline void TMR1_Enable(void)
 {
     TMR1 = 0;
     PIR1bits.CCP1IF = 0;

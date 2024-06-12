@@ -58,6 +58,7 @@ void main(void)
     
     while (1)
     {
+        SoftSer_Cyclic();
         LCD_Cyclic();
     }
 
