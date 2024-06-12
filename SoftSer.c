@@ -15,7 +15,6 @@ void SoftSer_Init(void)
     TRISBbits.TRISB0 = 1; // RX is input
     INTCONbits.INTF = 0;
     INTCONbits.INTE = 1; // Enable Start signal detection
-    TRISCbits.TRISC5 = 0;
 }
 
 void SoftSer_Cyclic(void)
@@ -38,7 +37,6 @@ void SoftSer_StartDetect(void)
 
 void SoftSer_CaptureBit(void)
 {
-    PORTCbits.RC5 = 1;
     if (bitCnt < 9)
     {
         if (0 != bitCnt)
@@ -79,5 +77,4 @@ void SoftSer_CaptureBit(void)
         INTCONbits.INTE = 1; // Enable Start signal detection
     }
     bitCnt++;
-    PORTCbits.RC5 = 0;
 }
