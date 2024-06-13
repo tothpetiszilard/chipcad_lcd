@@ -24,10 +24,9 @@
 /*
                          Main application
  */
-static volatile uint8_t portCheck = 0xFF;
-
 void main(void)
 {    
+    INTERRUPT_GlobalInterruptDisable();
     OSCCONbits.IRCF = 7u; // 8Mhz INTOSC
     while(OSCCONbits.HTS != 1)
     {
@@ -35,7 +34,7 @@ void main(void)
     }
     OSCCONbits.OSTS = 0u;
     OSCCONbits.SCS = 0u;
-
+    PIE2bits.OSFIE = 1;
     // When using interrupts, you need to set the Global and Peripheral Interrupt Enable bits
     // Use the following macros to:
     TMR1_Init();
@@ -43,6 +42,7 @@ void main(void)
     TRISCbits.TRISC6 = 0; // Backlight output
     __delay_ms(200);
     //TRISCbits.TRISC2 = 0; // Contrast output
+    PORTCbits.RC6 = 1; // Backlight ON
     
     hd44780_init();
     //EUSART_Initialize();

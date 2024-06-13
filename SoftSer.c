@@ -37,11 +37,19 @@ void SoftSer_StartDetect(void)
 
 void SoftSer_CaptureBit(void)
 {
-    if (bitCnt < 9)
+    if (bitCnt < 9u)
     {
         if (0 != bitCnt)
         {
-            rxByte |= (PORTBbits.RB0 << (bitCnt - 1));
+            if (0 != PORTBbits.RB0)
+            {
+                rxByte = 0x80u | (rxByte >>1u);
+            }
+            else
+            {
+                rxByte = (rxByte >>1u);
+            }
+            
         }
         else if (0 != PORTBbits.RB0)
         {
@@ -72,7 +80,10 @@ void SoftSer_CaptureBit(void)
             // Notify higher layer
             rxReady = 1;
         }
-        TMR1_Disable(); // Wait for next frame
+        //TMR1_Disable(); // Wait for next frame
+        PIE1bits.CCP1IE = 0;
+        PIR1bits.CCP1IF = 0;
+        T1CONbits.TMR1ON = 0; // Enable
         INTCONbits.INTF = 0; // Clear pending flag
         INTCONbits.INTE = 1; // Enable Start signal detection
     }

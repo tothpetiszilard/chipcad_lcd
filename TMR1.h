@@ -14,7 +14,7 @@ extern "C" {
 
     extern void TMR1_Init(void);
     inline void TMR1_Enable(void);
-    extern void TMR1_Disable(void);
+    inline void TMR1_Disable(void);
     extern void TMR1_Interrupt(void);
 
 

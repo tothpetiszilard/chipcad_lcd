@@ -8,7 +8,7 @@
 
 #ifdef CRC_TABLE
 // CRC array from the Maxim appnote
-const unsigned char crc_array[256] = {
+static const unsigned char crc_array[256] = {
 	0x00, 0x5e, 0xbc, 0xe2, 0x61, 0x3f, 0xdd, 0x83, 
 	0xc2, 0x9c, 0x7e, 0x20, 0xa3, 0xfd, 0x1f, 0x41, 
 	0x9d, 0xc3, 0x21, 0x7f, 0xfc, 0xa2, 0x40, 0x1e, 
@@ -43,7 +43,7 @@ const unsigned char crc_array[256] = {
 	0xb6, 0xe8, 0x0a, 0x54, 0xd7, 0x89, 0x6b, 0x35, 
 };
 
-unsigned char crc_table(unsigned char);
+static inline unsigned char crc_table(unsigned char);
 #endif /* CRC_TABLE */
 
 #ifdef CRC_NIBBLES
@@ -65,7 +65,6 @@ unsigned char crc_math(unsigned char);
 #endif /* CRC_MATH */
 
 inline void crc8_init(unsigned char);
-unsigned char crc8_byte(unsigned char);
 unsigned char crc8_stream(unsigned char*, unsigned int);
 
 #endif /* CRC8_H */

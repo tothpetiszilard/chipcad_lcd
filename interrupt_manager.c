@@ -71,11 +71,17 @@ void __interrupt() INTERRUPT_InterruptManager(void) {
     {
         EUSART_Transmit_ISR();
     }*/
-    else if (INTCONbits.T0IF != 0)
+    /*else if (INTCONbits.T0IF != 0)
     {
         TMR0_Interrupt();
+    }*/
+    else if (0 != PIR2bits.OSFIF)
+    {
+        // Clock problems
+        PIR2bits.OSFIF = 0;
     }
-    else {
+    else 
+    {
         //Unhandled Interrupt
     }
 }

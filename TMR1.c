@@ -27,7 +27,7 @@ inline void TMR1_Enable(void)
     timeCnt = 0;
 }
 
-void TMR1_Disable(void)
+inline void TMR1_Disable(void)
 {
     PIE1bits.CCP1IE = 0;
     PIR1bits.CCP1IF = 0;

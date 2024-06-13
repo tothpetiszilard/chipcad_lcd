@@ -23,10 +23,12 @@
 #include "crc8.h"
 
 // Global CRC variable
-volatile unsigned char crc;
+static volatile unsigned char crc;
 
 // Lets external code initialise the CRC variable, required if 
 // callers use crc8_byte
+
+static inline unsigned char crc8_byte(unsigned char);
 
 inline void crc8_init(unsigned char c) {
     crc = c;
@@ -63,7 +65,7 @@ unsigned char crc_math(unsigned char data) {
 
 #ifdef CRC_TABLE
 
-unsigned char crc_table(unsigned char data) {
+static inline unsigned char crc_table(unsigned char data) {
     int i = (data ^ crc) & 0xff;
 
     crc = crc_array[(data ^ crc)&0xff];
@@ -88,7 +90,7 @@ unsigned char crc_nibbles(unsigned char data) {
 // Will use the quickest method depending on what #defines
 // have been chosen
 
-unsigned char crc8_byte(unsigned char data) {
+static inline unsigned char crc8_byte(unsigned char data) {
 #ifdef CRC_TABLE
     crc_table(data);
 #endif
