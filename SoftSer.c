@@ -5,6 +5,7 @@
 
 #define SOFTSER_USE_PARITY (0)
 
+static volatile uint8_t rxBuff = 0;
 static volatile uint8_t rxByte = 0;
 static volatile uint8_t bitCnt = 0;
 static volatile uint8_t rxReady = 0;
@@ -22,6 +23,7 @@ void SoftSer_Cyclic(void)
     if (0 != rxReady)
     {
         Proto_RxIndication(rxByte);
+        rxByte = 0;
         rxReady = 0;
     }
 }
@@ -31,7 +33,7 @@ void SoftSer_StartDetect(void)
     INTCONbits.INTF = 0;
     INTCONbits.INTE = 0; // Disable Start signal detection
     TMR1_Enable(); // Start timer to catch first bit of packet
-    rxByte = 0;
+    rxBuff = 0;
     bitCnt = 0;
 }
 
@@ -43,11 +45,11 @@ void SoftSer_CaptureBit(void)
         {
             if (0 != PORTBbits.RB0)
             {
-                rxByte = 0x80u | (rxByte >>1u);
+                rxBuff = 0x80u | (rxBuff >>1u);
             }
             else
             {
-                rxByte = (rxByte >>1u);
+                rxBuff = (rxBuff >>1u);
             }
             
         }
@@ -78,7 +80,11 @@ void SoftSer_CaptureBit(void)
         else
         {
             // Notify higher layer
-            rxReady = 1;
+            if (0 == rxReady)
+            {
+                rxByte = rxBuff;
+                rxReady = 1;
+            }
         }
         //TMR1_Disable(); // Wait for next frame
         PIE1bits.CCP1IE = 0;

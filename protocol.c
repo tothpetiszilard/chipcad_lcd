@@ -50,16 +50,17 @@ void Proto_Clear(void)
 
 void Proto_RxIndication(uint8_t data)
 {
-    if ((IDLE == state) && (data == STARTCHAR))
+    uint8_t rxByte = data;
+    if ((IDLE == state) && (rxByte == STARTCHAR))
     {
         rxLen = 0;
         state = LEN;
     }
     else if (LEN == state)
     {
-        if (sizeof(rxBuffer1) > data)
+        if (sizeof(rxBuffer1) > rxByte)
         {
-            rxLen = data;
+            rxLen = rxByte;
             rxIdx = 0;
             state = DATA;
         }
@@ -70,7 +71,7 @@ void Proto_RxIndication(uint8_t data)
     }
     else if (DATA == state)
     {
-        buffSel[rxIdx] = data;
+        buffSel[rxIdx] = rxByte;
         rxIdx++;
         if (rxIdx >= rxLen)
         {
@@ -80,7 +81,7 @@ void Proto_RxIndication(uint8_t data)
     }
     else if (CRC == state)
     {
-        if (data == crc8_stream((uint8_t *)buffSel,rxLen))
+        if (rxByte == crc8_stream((uint8_t *)buffSel,rxLen))
         {
             // CRC OK
             if (0 == rxReady) // else data loss
