@@ -31,7 +31,7 @@ inline void TMR1_Disable(void)
 {
     PIE1bits.CCP1IE = 0;
     PIR1bits.CCP1IF = 0;
-    T1CONbits.TMR1ON = 0; // Enable
+    T1CONbits.TMR1ON = 0; // Disable
 }
 
 void TMR1_Interrupt(void)
