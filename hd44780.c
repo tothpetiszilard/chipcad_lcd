@@ -126,6 +126,7 @@ void hd44780_init(void)
 #ifdef HD44780_DUAL
 	}
 #endif
+    __delay_ms(20);
     hd44780_build(0,&hungarian[0][0]);
     hd44780_build(1,&hungarian[1][0]);
     hd44780_build(2,&hungarian[2][0]);
@@ -133,6 +134,7 @@ void hd44780_init(void)
     hd44780_build(4,&hungarian[4][0]);
     hd44780_build(5,&hungarian[5][0]);
     hd44780_build(6,&hungarian[6][0]);
+    hd44780_build(0,&hungarian[0][0]); // Workaround, sometimes the first custom char is not working 
 }
 
 //Input:
@@ -148,6 +150,7 @@ void hd44780_init(void)
  
 static void hd44780_build(unsigned char location, unsigned char *ptr)
 {
+    __delay_ms(1);
     unsigned char i;
     if(location<8)
     {
@@ -157,4 +160,5 @@ static void hd44780_build(unsigned char location, unsigned char *ptr)
             hd44780_put_char(ptr[ i ]);
         }
    }
+   __delay_ms(1);
 }

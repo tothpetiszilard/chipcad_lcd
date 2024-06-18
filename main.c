@@ -11,7 +11,7 @@
 #pragma config FOSC = INTRC_NOCLKOUT// Oscillator Selection bits (INTOSCIO oscillator: I/O function on RA6/OSC2/CLKOUT pin, I/O function on RA7/OSC1/CLKIN)
 #pragma config WDTE = OFF       // Watchdog Timer Enable bit (WDT disabled and can be enabled by SWDTEN bit of the WDTCON register)
 #pragma config PWRTE = ON      // Power-up Timer Enable bit (PWRT disabled)
-#pragma config MCLRE = ON       // RE3/MCLR pin function select bit (RE3/MCLR pin function is MCLR)
+#pragma config MCLRE = OFF       // RE3/MCLR pin function select bit (RE3/MCLR pin function is MCLR)
 #pragma config CP = OFF         // Code Protection bit (Program memory code protection is disabled)
 #pragma config CPD = OFF        // Data Code Protection bit (Data memory code protection is disabled)
 #pragma config BOREN = ON       // Brown Out Reset Selection bits (BOR enabled)
@@ -38,10 +38,10 @@ void main(void)
     // When using interrupts, you need to set the Global and Peripheral Interrupt Enable bits
     // Use the following macros to:
     TRISCbits.TRISC6 = 0; // Backlight output
-    __delay_ms(200);
+    __delay_ms(250);
     //TRISCbits.TRISC2 = 0; // Contrast output
     PORTCbits.RC6 = 1; // Backlight ON
-    
+    __delay_ms(10);
     hd44780_init();
     //EUSART_Initialize();
     // Disable the Global Interrupts
