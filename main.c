@@ -37,8 +37,6 @@ void main(void)
     PIE2bits.OSFIE = 1;
     // When using interrupts, you need to set the Global and Peripheral Interrupt Enable bits
     // Use the following macros to:
-    TMR1_Init();
-    SoftSer_Init();
     TRISCbits.TRISC6 = 0; // Backlight output
     __delay_ms(200);
     //TRISCbits.TRISC2 = 0; // Contrast output
@@ -53,6 +51,8 @@ void main(void)
     INTERRUPT_PeripheralInterruptEnable();
     __delay_ms(100);
     //
+    TMR1_Init();
+    SoftSer_Init();
     hd44780_set_address(0x0u); // Cursor to 0
     __delay_ms(4);
     
